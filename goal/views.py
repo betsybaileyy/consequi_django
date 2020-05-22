@@ -1,13 +1,26 @@
+from django.views import generic
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse_lazy
+from django.urls import reverse
+from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render
 from django.http import HttpResponse
 from goal.models import Achievement, Goal
 
+class IndexView(generic.ListView):
+    template_name = 'templates/homeScreen.html'
+    # context_object_name = 'latest_question_list'
 
-def index(request):
-    all_achievements = Achievement.objects.filter(name="Hello World")
-    all_goals = Goal.objects.all()
-    # return render(request, 'templates/homeScreen.html')
-    return HttpResponse(f"# of Achievements: <br># of Goals: {all_achievements}<br> # of goals: {len(all_goals)} ")
+
+    def index(request):
+        all_achievements = Achievement.objects.filter(name="Hello World")
+        all_goals = Goal.objects.all()
+        completed_goals = Goal.done(True)
+        open_goals = Goal.done(False)
+        # return render(request, 'templates/homeScreen.html')
+        return HttpResponse(f"# of Achievements: <br># of Goals: {all_achievements}<br> # of goals: {len(all_goals)} # of completed goals: {len(completed_goals)}. # of open goals{len(open_goals)}")
 
 
 
